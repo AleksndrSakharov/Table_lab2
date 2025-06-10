@@ -220,12 +220,6 @@ public:
             auto insertEnd = std::chrono::high_resolution_clock::now();
             int insertEfficiency = table.GetEfficiency();
             
-            table.ResetEff();
-            auto sortStart = std::chrono::high_resolution_clock::now();
-            table.SortData();
-            auto sortEnd = std::chrono::high_resolution_clock::now();
-            int sortEfficiency = table.GetEfficiency();
-            
             int totalSearchEff = 0;
             int minSearchEff = std::numeric_limits<int>::max();
             int maxSearchEff = 0;
