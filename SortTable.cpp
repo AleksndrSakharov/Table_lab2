@@ -145,7 +145,7 @@ SortTable& SortTable::operator=(const ScanTable& st){
     return *this;
 }
 
-void SortTable::ResetEff() {
+void SortTable::ResetEff1() {
     _efficiency = 0;
 }
 PDataValue SortTable::FindRecord(Key key){
@@ -176,7 +176,7 @@ PDataValue SortTable::FindRecord(Key key){
     }
     return nullptr;
 }
-    void SortTable::DelRecotd(Key key){
+    void SortTable::DelRecord(Key key){
         if (IsEmpty()) {
             throw "Table is empty";
         }

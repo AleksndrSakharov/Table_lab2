@@ -3,15 +3,11 @@
 
 
 int main() {
-    TabRecord** testRecords = generateTestRecords();
+    TestKitTable testkit =  TestKitTable();
     
-    TestScanTable(testRecords);
+    testkit.TestScanTable();
 
-    TestSortTable();
-    for (int i = 0; i < count; i++) {
-        delete testRecords[i];
-    }
-    delete[] testRecords;
-    
+    testkit.TestSortTable();
+   
     return 0;
 }

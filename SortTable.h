@@ -15,7 +15,7 @@ public:
 
     void QuickSort(PTabRecord *data, size_t count);
     void QuickSplit(PTabRecord *data, size_t count, size_t& pivot);
-    void ResetEff();
+    void ResetEff1();
     void SortData();
 
 public:
@@ -38,6 +38,6 @@ public:
     }
 
     virtual PDataValue FindRecord(Key key) override;
-    virtual void DelRecotd(Key key) override;
+    virtual void DelRecord(Key key) override;
     virtual void InsRecord(Key key, PDataValue value) override;
 };

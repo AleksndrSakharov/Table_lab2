@@ -93,7 +93,7 @@ void HashArray::InsRecord(Key key, PDataValue data){
     _dataCount++;
 }
 
-void HashArray::DelRecotd(Key key){
+void HashArray::DelRecord(Key key){
     if (!(FindRecord(key))) throw "No value";
     delete _records[_currPos];
     _records[_currPos] = _mark;

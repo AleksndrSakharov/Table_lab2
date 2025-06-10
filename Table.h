@@ -15,6 +15,7 @@ public:
     virtual bool IsFull() const = 0;
 
     virtual bool Reset() = 0;
+    // virtual void ResetEff() = 0;
     virtual bool IsTabEnded() const = 0;
     virtual bool GoNext() = 0;
 
@@ -22,7 +23,7 @@ public:
     virtual PDataValue GetValue() const = 0;
 
     virtual PDataValue FindRecord(Key key) = 0;
-    virtual void DelRecotd(Key key) = 0;
+    virtual void DelRecord(Key key) = 0;
     virtual void InsRecord(Key key, PDataValue value)= 0;
     
 };

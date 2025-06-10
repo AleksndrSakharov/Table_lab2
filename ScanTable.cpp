@@ -14,7 +14,7 @@ PDataValue ScanTable::FindRecord(Key key){
     }
     return nullptr;
 }
-void ScanTable::DelRecotd(Key key){
+void ScanTable::DelRecord(Key key){
     if(FindRecord(key) == nullptr) throw "!!!";
     delete _records[_curPos];
     _records[_curPos] = _records[_dataCount - 1];
@@ -26,4 +26,8 @@ void ScanTable::InsRecord(Key key, PDataValue data){
         throw "Table is Full";
     }
     _records[_dataCount++] = new TabRecord(key, data);
+}
+
+void ScanTable::ResetEff(){
+    _efficiency = 0;
 }

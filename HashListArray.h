@@ -22,6 +22,6 @@ public:
     PDataValue GetValue() const override;
 
     PDataValue FindRecord(Key key) override;
-    void DelRecotd(Key key) override;
+    void DelRecord(Key key) override;
     void InsRecord(Key key, PDataValue value) override;
 };

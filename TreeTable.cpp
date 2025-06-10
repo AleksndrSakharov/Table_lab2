@@ -54,7 +54,7 @@ PDataValue TreeTable::GetValue() const {
     return _pCurrent->_data;
 }
 
-void TreeTable::DelRecotd(Key key){
+void TreeTable::DelRecord(Key key){
     if (FindRecord(key) == nullptr){
         throw "No element";
     }

@@ -47,10 +47,11 @@ public:
 
     virtual Key GetKey(DataPos position) const;
     virtual PDataValue GetValue(DataPos position) const;
-    virtual void DelRecotd(Key key) = 0;
+    virtual void DelRecord(Key key) = 0;
     virtual void InsRecord(Key key, PDataValue value)= 0;
 
     virtual bool Reset();
+    // virtual void ResetEff();
     virtual bool IsTabEnded() const;
     virtual bool GoNext();
 

@@ -70,7 +70,7 @@ PDataValue HashListArray::FindRecord(Key key){
     }
     return tmp;
 }
-void HashListArray::DelRecotd(Key key){
+void HashListArray::DelRecord(Key key){
     PDataValue tmp = FindRecord(key);
     if (tmp == nullptr) throw "No record";
     else{
