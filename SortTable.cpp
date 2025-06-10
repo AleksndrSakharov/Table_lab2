@@ -145,7 +145,7 @@ SortTable& SortTable::operator=(const ScanTable& st){
     return *this;
 }
 
-void SortTable::ResetEff1() {
+void SortTable::ResetEff() {
     _efficiency = 0;
 }
 PDataValue SortTable::FindRecord(Key key){

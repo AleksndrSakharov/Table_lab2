@@ -3,6 +3,7 @@
 
 
 int main() {
+    srand(time(NULL));
     TestKitTable testkit =  TestKitTable();
     
     testkit.TestScanTable();

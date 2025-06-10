@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <random>
 #include <chrono>
 #include <limits>
 #include "SortTable.h"
@@ -9,7 +10,9 @@
 #include "TabRecord.h"
 #include "Marks.h"
 
-const int count = 10000;
+const int count = 40000;
+const int countfind = 4000;
+const int countdel = 40000;
 
 class TestKitTable
 {
@@ -50,33 +53,48 @@ public:
         std::cout << "\n----ScanTable----" << std::endl;
         
         ScanTable scanTable(count);
-        scanTable.ResetEff();
+        scanTable.ResetEff(); 
         auto insertStart = std::chrono::high_resolution_clock::now();
         FillTable(scanTable, _testRecords);
         auto insertEnd = std::chrono::high_resolution_clock::now();
         int insertEfficiency = scanTable.GetEfficiency();
         
-        int totalSearchEfficiency = 0;
-        int maxSearchEfficiency = 0;
-        int minSearchEfficiency = std::numeric_limits<int>::max();
-        auto searchStart = std::chrono::high_resolution_clock::now();
-        for (int i = 0; i < count; i++) {
+        int totalSearchEfficiency1 = 0;
+        int maxSearchEfficiency1 = 0;
+        // scanTable.FillMySet(_testRecords);
+        int minSearchEfficiency1 = std::numeric_limits<int>::max();
+        auto searchStart1 = std::chrono::high_resolution_clock::now();
+        for (int i = 0; i < countfind; i++) {
             scanTable.ResetEff();
-            scanTable.FindRecord(_testRecords[i]->GetKey());
+            scanTable.FindRecord(_testRecords[rand() % count]->GetKey());
             int efficiency = scanTable.GetEfficiency();
-            totalSearchEfficiency += efficiency;
-            if (efficiency > maxSearchEfficiency) maxSearchEfficiency = efficiency;
-            if (efficiency < minSearchEfficiency) minSearchEfficiency = efficiency;
+            totalSearchEfficiency1 += efficiency;
+            if (efficiency > maxSearchEfficiency1) maxSearchEfficiency1 = efficiency;
+            if (efficiency < minSearchEfficiency1) minSearchEfficiency1 = efficiency;
         }
-        auto searchEnd = std::chrono::high_resolution_clock::now();
+        auto searchEnd1 = std::chrono::high_resolution_clock::now();
         
-        ScanTable delTable(count);
+        int totalSearchEfficiency2 = 0;
+        int maxSearchEfficiency2 = 0;
+        int minSearchEfficiency2 = std::numeric_limits<int>::max();
+        auto searchStart2 = std::chrono::high_resolution_clock::now();
+        for (int i = 0; i < countfind; i++) {
+            scanTable.ResetEff();
+            scanTable.FindRecordRand(count, _testRecords[rand() % count]->GetKey());
+            int efficiency = scanTable.GetEfficiency();
+            totalSearchEfficiency2 += efficiency;
+            if (efficiency > maxSearchEfficiency2) maxSearchEfficiency2 = efficiency;
+            if (efficiency < minSearchEfficiency2) minSearchEfficiency2 = efficiency;
+        }
+        auto searchEnd2 = std::chrono::high_resolution_clock::now();
+
+        ScanTable delTable(countdel);
         FillTable(delTable, _testRecords);
         int totalDelefficiency = 0;
         int maxDelefficiency = 0;
         int minDelefficiency = std::numeric_limits<int>::max();
         auto delStart = std::chrono::high_resolution_clock::now();
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < countdel; i++) {
             delTable.ResetEff();
             delTable.DelRecord(_testRecords[i]->GetKey()); 
             int efficiency = delTable.GetEfficiency();
@@ -92,13 +110,21 @@ public:
         std::cout << "Insert Efficiency: " << insertEfficiency << std::endl;
         
         std::cout << "Search Time: " 
-                  << std::chrono::duration<double, std::milli>(searchEnd - searchStart).count() 
+                  << std::chrono::duration<double, std::milli>(searchEnd1 - searchStart1).count() 
                   << " ms" << std::endl;
         std::cout << "Search Efficiency:" << std::endl;
-        std::cout << "  Max efficiency: " << maxSearchEfficiency << std::endl;
-        std::cout << "  Min efficiency: " << minSearchEfficiency << std::endl;
-        std::cout << "  Avg efficiency: " << static_cast<double>(totalSearchEfficiency)/count << std::endl;
+        std::cout << "  Max efficiency: " << maxSearchEfficiency1 << std::endl;
+        std::cout << "  Min efficiency: " << minSearchEfficiency1 << std::endl;
+        std::cout << "  Avg efficiency: " << static_cast<double>(totalSearchEfficiency1)/count << std::endl;
         
+        std::cout << "SearchRand Time: " 
+                  << std::chrono::duration<double, std::milli>(searchEnd2 - searchStart2).count() 
+                  << " ms" << std::endl;
+        std::cout << "SearchRand Efficiency:" << std::endl;
+        std::cout << "  Max efficiency: " << maxSearchEfficiency2 << std::endl;
+        std::cout << "  Min efficiency: " << minSearchEfficiency2 << std::endl;
+        std::cout << "  Avg efficiency: " << static_cast<double>(totalSearchEfficiency2)/count << std::endl;
+
         std::cout << "Delete Time: " 
                   << std::chrono::duration<double, std::milli>(delEnd - delStart).count() 
                   << " ms" << std::endl;
@@ -134,9 +160,9 @@ public:
             int maxSearchEff = 0;
             table.ResetEff();
             auto searchStart = std::chrono::high_resolution_clock::now();
-            for (int j = 0; j < count; j++) {
+            for (int j = 0; j < countfind; j++) {
                 table.ResetEff();
-                table.FindRecord(_testRecords[j]->GetKey());
+                table.FindRecord(_testRecords[rand() % count]->GetKey());
                 int eff = table.GetEfficiency();
                 totalSearchEff += eff;
                 if (eff < minSearchEff) minSearchEff = eff;
@@ -144,8 +170,7 @@ public:
             }
             auto searchEnd = std::chrono::high_resolution_clock::now();
             
-            // Тест удаления для SortTable
-            SortTable delTable(count);
+            SortTable delTable(countdel);
             delTable.SetSortMethod(methods[i]);
             FillTable(delTable, _testRecords);
             delTable.SortData();
@@ -154,7 +179,7 @@ public:
             int minDelEff = std::numeric_limits<int>::max();
             int maxDelEff = 0;
             auto delStart = std::chrono::high_resolution_clock::now();
-            for (int j = 0; j < count; j++) {
+            for (int j = 0; j < countdel; j++) {
                 delTable.ResetEff();
                 delTable.DelRecord(_testRecords[j]->GetKey());
                 int eff = delTable.GetEfficiency();

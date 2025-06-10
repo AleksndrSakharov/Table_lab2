@@ -1,6 +1,7 @@
 #pragma once
 #include "ScanTable.h"
 
+
 enum SortMethod {Insert, Merge, Quick};
 
 class SortTable : public ScanTable
@@ -15,7 +16,7 @@ public:
 
     void QuickSort(PTabRecord *data, size_t count);
     void QuickSplit(PTabRecord *data, size_t count, size_t& pivot);
-    void ResetEff1();
+    void ResetEff();
     void SortData();
 
 public:

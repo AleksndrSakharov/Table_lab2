@@ -1,5 +1,10 @@
 #include"ScanTable.h"
 
+// void ScanTable::FillMySet(TabRecord** tabs){
+
+
+// }
+
 PDataValue ScanTable::FindRecord(Key key){
     int i = 0;
     for(i; i < _dataCount; i++){
@@ -14,6 +19,27 @@ PDataValue ScanTable::FindRecord(Key key){
     }
     return nullptr;
 }
+
+PDataValue ScanTable::FindRecordRand(int cnt, Key tkey){
+    Key key = "key_" + std::to_string(rand() % cnt);
+    int k = 0;
+    while (true){
+        Key key = "key_" + std::to_string(rand() % cnt);
+        k++;
+        if(myset.find(key) == myset.end() && key == tkey){
+            myset.insert(key);
+            break;
+        }
+    }
+    _efficiency += k;
+    if(k < _dataCount){
+        _curPos = k;
+        return _records[k]->_data;
+    }
+    return nullptr;
+}
+
+
 void ScanTable::DelRecord(Key key){
     if(FindRecord(key) == nullptr) throw "!!!";
     delete _records[_curPos];
