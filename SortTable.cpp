@@ -203,4 +203,5 @@ PDataValue SortTable::FindRecord(Key key){
         _records[_curPos] = new TabRecord(key, data);
         _dataCount++;
         _curPos++;
+        SortData();
     }
