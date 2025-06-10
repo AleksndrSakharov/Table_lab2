@@ -5,14 +5,16 @@
 #include <random>
 #include <chrono>
 #include <limits>
+#include <fstream>
+#include <filesystem>
 #include "SortTable.h"
 #include "ScanTable.h"
 #include "TabRecord.h"
 #include "Marks.h"
 
-const int count = 40000;
-const int countfind = 4000;
-const int countdel = 40000;
+const int count = 3000;
+const int countfind = 2;
+const int countdel = 3000;
 
 class TestKitTable
 {
@@ -26,9 +28,23 @@ public:
     TabRecord** generateTestRecords() {
         std::srand(static_cast<unsigned>(std::time(nullptr)));
         TabRecord** records = new TabRecord*[count];
-        
+        int x = 0;
+        int y = 0;
+        int z = 0;
         for (int i = 0; i < count; i++) {
-            Key key = "key_" + std::to_string(i + 1);
+            std::mt19937 rng(std::random_device{}());
+            Key key = GenerateFIO(x, y, z);
+            z++;
+            if (z >= patronymics.size()){
+                z = 0;
+                y++;
+                if (y >= names.size()){
+                    y = 0;
+                    x++;
+                    if (x >= surnames.size()) x = 0;
+                }
+            }
+
             PDataValue val = new Marks(1, 2, 3, 4, 5);
             records[i] = new TabRecord(key, val);
         }
@@ -43,6 +59,61 @@ public:
         return records;
     }
 
+     std::vector<std::string> surnames = {
+        "Ivanov", "Petrov", "Sidorov", "Smirnov", "Kuznetsov", "Popov", "Vasilyev", "Sokolov", "Mikhailov", "Fedorov",
+        "Morozov", "Volkov", "Alekseev", "Lebedev", "Semenov", "Egorov", "Pavlov", "Kozlov", "Stepanov", "Nikolaev",
+        "Orlov", "Andreev", "Makarov", "Nikitin", "Zhukov", "Solovyov", "Borisov", "Yakovlev", "Grigoryev", "Romanov",
+        "Vorobyev", "Sergeev", "Karpov", "Gusev", "Titov", "Kiselev", "Maltsev", "Bykov", "Tikhonov", "Zaitsev",
+        "Vinogradov", "Bogdanov", "Savelyev", "Mitin", "Chernov", "Kudryavtsev", "Baranov", "Danilov", "Kalinin", "Belov",
+        "Komarov", "Krylov", "Korolev", "Efimov", "Sorokin", "Shubin", "Kabanov", "Markov", "Nikiforov", "Ignatov",
+        "Maslov", "Konovalov", "Filatov", "Samoylov", "Gerasimov", "Frolov", "Ulyanov", "Drozdov", "Kulikov", "Belyaev",
+        "Ponomarev", "Antipov", "Zverev", "Denisov", "Rodionov", "Anisimov", "Klimov", "Avdeev", "Gromov", "Korneev",
+        "Babenko", "Loginov", "Kuzmin", "Fadeev", "Prokofiev", "Znamensky", "Belkin", "Polyakov", "Reshetnikov", "Panin",
+        "Shcherbakov", "Bobrov", "Zolotov", "Timofeev", "Chistyakov", "Yashin", "Babkin", "Zadorozhny", "Troitsky", "Suvorov"
+    };
+
+    std::vector<std::string> names = {
+        "Aleksandr", "Dmitry", "Maxim", "Sergey", "Andrey", "Alexey", "Ivan", "Nikolay", "Yuri", "Viktor",
+        "Vladimir", "Artem", "Pavel", "Oleg", "Egor", "Vyacheslav", "Ilya", "Roman", "Kirill", "Stepan",
+        "Anatoly", "Timur", "Denis", "Grigory", "Fedor", "Vasiliy", "Gennady", "Stanislav", "Konstantin", "Valery",
+        "Boris", "Leonid", "Mikhail", "Arkady", "Valentin", "German", "Yaroslav", "Nazar", "Bogdan", "Savely",
+        "Ruslan", "Semyon", "Artur", "Eduard", "Albert", "Ostap", "Anton", "Ignat", "Yan", "Mark",
+        "Aleksey", "Vitaly", "Vsevolod", "Rodion", "Miron", "David", "Gleb", "Tikhon", "Lev", "Nikita",
+        "Platon", "Andrian", "Arseny", "Demid", "Yakov", "Matvey", "Taras", "Timofey", "Stepan", "Vladislav",
+        "Danila", "Zahar", "Frol", "German", "Arkhip", "Danil", "Saveliy", "Filipp", "Artyom", "Vadim",
+        "Yevgeny", "Ignatiy", "Kir", "Lavr", "Makar", "Orest", "Rodion", "Severin", "Trofim", "Ustin",
+        "Yulian", "Avgust", "Borislav", "Gavriil", "Innokentiy", "Klim", "Nazar", "Prokhor", "Rostislav", "Svyatoslav"
+    };
+
+    std::vector<std::string> patronymics = {
+        "Aleksandrovich", "Dmitrievich", "Maximovich", "Sergeevich", "Andreevich", "Alexeevich", "Ivanovich", "Nikolaevich", "Yurievich", "Viktorovich",
+        "Vladimirovich", "Artemovich", "Pavlovich", "Olegovich", "Egorovich", "Vyacheslavovich", "Ilyich", "Romanovich", "Kirillovich", "Stepanovich",
+        "Anatolievich", "Timurovich", "Denisovich", "Grigoryevich", "Fedorovich", "Vasilevich", "Gennadievich", "Stanislavovich", "Konstantinovich", "Valerievich",
+        "Borisovich", "Leonidovich", "Mikhailovich", "Arkadievich", "Valentinovich", "Germanovich", "Yaroslavovich", "Nazarovich", "Bogdanovich", "Savelievich",
+        "Ruslanovich", "Semenovich", "Arturovich", "Eduardovich", "Albertovich", "Ostapovich", "Antonovich", "Ignatovich", "Yanovich", "Markovich",
+        "Alekseevich", "Vitalievich", "Vsevolodovich", "Rodionovich", "Mironovich", "Davidovich", "Glebovich", "Tikhonovich", "Lvovich", "Nikitich",
+        "Platonovich", "Andrianovich", "Arsenievich", "Demidovich", "Yakovlevich", "Matveevich", "Tarasovich", "Timofeevich", "Stepanovich", "Vladislavovich",
+        "Danilovich", "Zaharovich", "Frolovich", "Germanovich", "Arkhipovich", "Danilovich", "Savelievich", "Filippovich", "Artyomovich", "Vadimovich",
+        "Evgenievich", "Ignatievich", "Kirovich", "Lavrovich", "Makarovich", "Orestovich", "Rodionovich", "Severinovich", "Trofimovich", "Ustinovich",
+        "Yulianovich", "Avgustovich", "Borislavovich", "Gavriilovich", "Innokentievich", "Klimovich", "Nazarovich", "Prokhorovich", "Rostislavovich", "Svyatoslavovich"
+    };
+
+        std::string GenerateRandomSurname() { 
+            return surnames[rand() % surnames.size()];      
+        }
+
+        std::string GenerateRandomName() {
+            return names[rand() % names.size()];      
+        }
+
+        std::string GenerateRandomPatronymic() { 
+            return patronymics[rand() % patronymics.size()];      
+        }
+
+        string GenerateFIO(int x, int y, int z){
+            return surnames[x] + " " + names[y] + " " + patronymics[z];
+        }
+
     void FillTable(ScanTable &table, TabRecord** records) {
         for (int i = 0; i < count; i++) {
             table.InsRecord(records[i]->GetKey(), records[i]->GetData());
@@ -50,8 +121,7 @@ public:
     }
 
     void TestScanTable() {
-        std::cout << "\n----ScanTable----" << std::endl;
-        
+        std::cout << "\n----ScanTable----" << std::endl; 
         ScanTable scanTable(count);
         scanTable.ResetEff(); 
         auto insertStart = std::chrono::high_resolution_clock::now();
@@ -136,6 +206,7 @@ public:
 
     void TestSortTable() {
         std::cout << "\n----SortTable---" << std::endl;
+        random_device rd;
         SortMethod methods[] = {Insert, Merge, Quick};
         std::string methodsNames[] = {"Insert", "Merge", "Quick"};
         for (int i = 0; i < 3; i++) {
