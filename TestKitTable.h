@@ -47,16 +47,16 @@ void TestScanTable(TabRecord** testRecords) {
     FillTable(scanTable, testRecords);
     auto insertEnd = std::chrono::high_resolution_clock::now();
     
-    int totalSearchefficiency = 0;
-    int maxSearchefficiency = 0;
-    int minSearchefficiency = std::numeric_limits<int>::max();
+    int totalSearchEfficiency = 0;
+    int maxSearchEfficiency = 0;
+    int minSearchEfficiency = std::numeric_limits<int>::max();
     auto searchStart = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < count; i++) {
         scanTable.FindRecord(testRecords[i]->GetKey());
         int efficiency = scanTable.GetEfficiency();
-        totalSearchefficiency += efficiency;
-        if (efficiency > maxSearchefficiency) maxSearchefficiency = efficiency;
-        if (efficiency < minSearchefficiency) minSearchefficiency = efficiency;
+        totalSearchEfficiency += efficiency;
+        if (efficiency > maxSearchEfficiency) maxSearchEfficiency = efficiency;
+        if (efficiency < minSearchEfficiency) minSearchEfficiency = efficiency;
     }
     auto searchEnd = std::chrono::high_resolution_clock::now();
     
@@ -83,9 +83,9 @@ void TestScanTable(TabRecord** testRecords) {
               << std::chrono::duration<double, std::milli>(searchEnd - searchStart).count() 
               << " ms" << std::endl;
     std::cout << "Search Efficiency:" << std::endl;
-    std::cout << "  Max efficiency: " << maxSearchefficiency << std::endl;
-    std::cout << "  Min efficiency: " << minSearchefficiency << std::endl;
-    std::cout << "  Avg efficiency: " << static_cast<double>(totalSearchefficiency)/count << std::endl;
+    std::cout << "  Max efficiency: " << maxSearchEfficiency << std::endl;
+    std::cout << "  Min efficiency: " << minSearchEfficiency << std::endl;
+    std::cout << "  Avg efficiency: " << static_cast<double>(totalSearchEfficiency)/count << std::endl;
     
     std::cout << "Delete Time: " 
               << std::chrono::duration<double, std::milli>(delEnd - delStart).count() 
