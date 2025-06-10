@@ -238,7 +238,6 @@ public:
             SortTable delTable(countdel);
             delTable.SetSortMethod(methods[i]);
             FillTable(delTable, _testRecords);
-            delTable.SortData();
             
             int totalDelEff = 0;
             int minDelEff = std::numeric_limits<int>::max();
